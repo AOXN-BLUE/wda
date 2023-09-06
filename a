@@ -1,0 +1,146 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+local Window = Library.CreateLib("Vort-x hub", "Ocean")
+--[[
+
+    --THEMES--
+
+
+	LightTheme --Eyes are burning.
+    DarkTheme --Vortex
+    GrapeTheme -weird
+    BloodTheme --Sussy Amongus
+    Ocean --Smooth
+    Midnight --Too like LightTheme
+    Sentinel --Nah
+    Synapse --Rxin will prob like it
+
+
+]]
+
+--Tabs--
+
+local Wel = Window:NewTab("Welcome")
+local Come = Wel:NewSection("Welcome, ".. game.Players.LocalPlayer.DisplayName .."!")
+
+local Mod = Window:NewTab("Mods")
+local Mods = Mod:NewSection("Mods")
+
+local Hub = Window:NewTab("Hubs")
+local Hubs = Hub:NewSection("Hubs (NOT FROM VORT-X)")
+
+local Optimizer = Window:NewTab("Optimizers")
+local Optimizers = Optimizer:NewSection("Optimizers (rejoin to enable them again)")
+
+local Hom = Window:NewTab("Credits")
+local Home = Hom:NewSection("Home")
+
+
+--Welcome--
+
+local FPSinfo = Come:NewLabel("Fps: nil")
+local Tiempo = tick()
+game:GetService("RunService").RenderStepped:Connect(function(a)
+	local Transcurrido = math.abs(Tiempo-tick())
+	Tiempo = tick()
+	FPSinfo:UpdateLabel("Fps: ".. math.floor(1/Transcurrido))
+end)
+
+local UserID = Come:NewLabel("Local Info: ".. game.Players.LocalPlayer.UserId)
+local UserID = Come:NewLabel("PlaceID: ".. game.PlaceId)
+Come:NewKeybind("Toggle UI Bind", "Allows you to Toggle the UI", Enum.KeyCode.RightAlt, function()
+	Library:ToggleUI()
+end)
+
+
+
+--Home--
+
+Home:NewLabel("✐Made by xunax/Vort-x.")
+Home:NewLabel("✦Tested by Rxin/Arctic.")
+Home:NewLabel("0G_VR my Best Buddy.")
+
+
+--Mods--
+
+Mods:NewButton("Replay Mod", "Z to Start recording, X to Replay, P to Stop", function() local input = game.UserInputService local RecordReplay = Instance.new("BoolValue") RecordReplay.Parent = script local Stopped = false local replay = Instance.new("BoolValue") replay.Parent = script input.InputBegan:Connect(function(key,GPE) if key.KeyCode == Enum.KeyCode.Z then if RecordReplay.Value == false then RecordReplay.Value = true replay.Value = false else RecordReplay.Value = false end end if key.KeyCode == Enum.KeyCode.X then if replay.Value == false then replay.Value = true RecordReplay.Value = false else replay.Value = false end end if key.KeyCode == Enum.KeyCode.P then Stopped = true end end) local Folder = Instance.new("Folder") Folder.Parent = game.ReplicatedFirst Folder.Name = "File" local List = 0 local NumberOfList = Instance.new("Folder") NumberOfList.Parent = workspace game["Run Service"].Heartbeat:Connect(function() NumberOfList.Name = List if RecordReplay.Value == true and Stopped == false then local ReplayPart = Instance.new("Part") ReplayPart.Size = Vector3.new(1,1,1) ReplayPart.Transparency = 1 ReplayPart.Anchored = true ReplayPart.Parent = Folder ReplayPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame ReplayPart.CanCollide = false List += 1 ReplayPart.Name = List end if replay.Value == true and Stopped == false then Folder:FindFirstChild(List) game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(Folder:FindFirstChild(List).CFrame,.1) Folder:FindFirstChild(List):Destroy() game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0,-2,0) List -= 1 end end) end)
+
+Mods:NewToggle("Mega-SpeedBoost", "Makes you the Flash", function(Value)
+	local Speed = 2305
+	local Character = game.Players.LocalPlayer.Character
+	if Value == true then
+		Character:FindFirstChildOfClass("Humanoid").WalkSpeed = Speed
+	else
+		Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+	end	
+end)
+local CustomSpeed = 25
+
+Mods:NewToggle("SpeedBoost", "Makes you abit Faster", function(Value)
+	local Character = game.Players.LocalPlayer.Character
+	if Value == true then
+		Character:FindFirstChildOfClass("Humanoid").WalkSpeed = CustomSpeed
+	else
+		Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+	end	
+end)
+Mods:NewSlider("SpeedBoost Value", "Edits the Speed Of the Boost", 2305, 25, function(s) -- 500 (MaxValue) | 0 (MinValue)
+	CustomSpeed = s
+end)
+
+Mods:NewButton("Hard Reset", "Resets Your Character", function()
+	local Character = game.Players.LocalPlayer.Character
+	Character:FindFirstChild("HumanoidRootPart").CFrame = Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.new(0,20,0)
+	wait(0.2)
+	Character.Torso:Destroy()
+	wait(0.4)
+	Character:Destroy()
+end)
+
+
+Mods:NewButton("Legless", "Reset To Turn it Off.", function()
+	game.Players.LocalPlayer.Character["Left Leg"]:Destroy()
+	game.Players.LocalPlayer.Character["Right Leg"]:Destroy()
+end)
+
+
+
+--Hubs--
+
+Hubs:NewButton("Arctic PrisonLife Hub [BETA]", "This Is a Beta, I DO NOT OWN IT", function()
+	loadstring(game:GetHttps("https://pastebin.com/raw/9DhajNXp"))()
+end)
+
+--Optimizers--
+
+Optimizers:NewButton("Disable Animation", "Disables the animations of everyone", function()
+	local Other = game.Players
+	for i,v in pairs(Other:GetPlayers()) do
+		for n,d in pairs(v.Character:WaitForChild("Torso"):GetChildren()) do
+			if d:IsA("Motor6D") then
+				local Weld = Instance.new("Weld")
+				Weld.Parent = d.Parent
+				Weld.Part0 = d.Part0
+				Weld.Part1 = d.Part1
+				Weld.C0 = d.C0
+				Weld.C1 = d.C1
+				d.Enabled = false
+			end
+		end
+	end
+end)
+
+Optimizers:NewButton("Disable Textures", "Best for Reducing Lag but Worst Cause Ugly", function()
+	for i,v in pairs(workspace:GetDescendants()) do
+		if v:IsA("Texture") or v:IsA("Decal") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("SurfaceAppearance") then
+			v:Destroy()
+		elseif v:IsA("SpecialMesh") then
+			v.TextureId = "" -- Remove texture from the mesh
+		elseif v:IsA("MeshPart") then
+			v.Material = Enum.Material.SmoothPlastic
+			v.TextureID = ""
+		elseif v:IsA("Part") then
+			v.Material = Enum.Material.SmoothPlastic
+		end
+	end
+end)
